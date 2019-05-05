@@ -3,11 +3,12 @@ package service;
 import model.Currency;
 import model.ExchangeRate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExchangeRateService {
-    private static List <ExchangeRate> listOfExchangeRates = new ArrayList<>();
+    private static List<ExchangeRate> listOfExchangeRates = new ArrayList<>();
 
     private static ExchangeRateService ourInstance = new ExchangeRateService();
 
@@ -15,7 +16,28 @@ public class ExchangeRateService {
         return ourInstance;
     }
 
+    static {
+        try {
+            List<List<String>> dataCSV;
+            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv");
+            dataCSV.remove(0);
+
+            updateCurrencies();
+            for (List<String> data: dataCSV) {
+                double rate = Double.parseDouble(data.get(4));
+                String code = data.get(1);
+                setRateToCurrencyCode(rate, code);
+            }
+
+        } catch(IOException ex) {
+            throw new Error(ex);
+        }
+    }
+
     private ExchangeRateService() {
+    }
+
+    private static void updateCurrencies() {
         CurrencyService CS = CurrencyService.getInstance();
         List <Currency> currencies = CurrencyService.getListOfCurrencies();
 
@@ -28,7 +50,6 @@ public class ExchangeRateService {
 
             listOfExchangeRates.add(exchangeRate);
         }
-
     }
 
     public static List<ExchangeRate> getListOfExchangeRates() {
@@ -37,36 +58,6 @@ public class ExchangeRateService {
 
     public static void setListOfExchangeRates(List<ExchangeRate> listOfExchangeRates) {
         ExchangeRateService.listOfExchangeRates = listOfExchangeRates;
-    }
-
-    public void updateExchangeRates() {
-        for (ExchangeRate exchangeRate: listOfExchangeRates) {
-            switch (exchangeRate.getCurrencyCode()) {
-                case "EUR":
-                    exchangeRate.setRate(0.890452);
-                    break;
-                case "USD":
-                    exchangeRate.setRate(1.000000);
-                    break;
-                case "GBP":
-                    exchangeRate.setRate(0.765682);
-                    break;
-                case "RON":
-                    exchangeRate.setRate(4.243342);
-                    break;
-                case "MDL":
-                    exchangeRate.setRate(17.374685);
-                    break;
-                case "RUB":
-                    exchangeRate.setRate(65.469646);
-                    break;
-                case "CHF":
-                    exchangeRate.setRate(0.994877);
-                    break;
-                default:
-                    exchangeRate.setRate(-1.000000);
-            }
-        }
     }
 
     public ExchangeRate getCurrencyByName(String name) {
@@ -97,6 +88,14 @@ public class ExchangeRateService {
         }
 
         return null;
+    }
+
+    private static void setRateToCurrencyCode(double rate, String code) {
+        for (ExchangeRate exchangeRate: listOfExchangeRates) {
+            if (exchangeRate.getCurrencyCode().equals(code)) {
+                exchangeRate.setRate(rate);
+            }
+        }
     }
 
     public double exchange(String fromCurrencyCode, String toCurrencyCode, double sum) {

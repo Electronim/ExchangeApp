@@ -2,11 +2,12 @@ package service;
 
 import model.Currency;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyService {
-    private static List <Currency> listOfCurrencies = new ArrayList <>();
+    private static List<Currency> listOfCurrencies = new ArrayList<>();
 
     private static CurrencyService ourInstance = new CurrencyService();
 
@@ -14,14 +15,24 @@ public class CurrencyService {
         return ourInstance;
     }
 
+    static {
+        try {
+            List<List<String>> dataCSV;
+            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv");
+            dataCSV.remove(0);
+            for (List<String> data: dataCSV) {
+                String currencyName = data.get(0);
+                String currencyCode = data.get(1);
+                String currencySymbol = data.get(2);
+                listOfCurrencies.add(new Currency(currencyName, currencyCode, currencySymbol));
+            }
+
+        } catch(IOException ex) {
+            throw new Error(ex);
+        }
+    }
+
     private CurrencyService() {
-        listOfCurrencies.add(new Currency("Euro", "EUR", "€"));
-        listOfCurrencies.add(new Currency("United States Dollar", "USD", "$"));
-        listOfCurrencies.add(new Currency("British Pound", "GBP", "£"));
-        listOfCurrencies.add(new Currency("Romanian leu", "RON", "lei"));
-        listOfCurrencies.add(new Currency("Moldovan leu", "MDL", "L"));
-        listOfCurrencies.add(new Currency("Russian ruble", "RUB", "\u20BD"));
-        listOfCurrencies.add(new Currency("Swiss franc", "CHF", "Fr"));
     }
 
     public static List<Currency> getListOfCurrencies() {

@@ -1,16 +1,19 @@
 package model;
 
+import service.CSVService;
 import service.CurrencyService;
 import service.TransactionService;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class ExchangeOffice {
-    private String name;
-    private String country;
-    private String address;
-    private String phoneNumber;
-    private Map<Currency, Double> quantity;
+    private static String name;
+    private static String country;
+    private static String address;
+    private static String phoneNumber;
+    private static Map<Currency, Double> quantity;
 
     private static ExchangeOffice ourInstance = new ExchangeOffice();
 
@@ -18,23 +21,37 @@ public class ExchangeOffice {
         return ourInstance;
     }
 
+    {
+        try {
+            List<List<String>> dataCSVCurrency, dataCSVOffice;
+
+            dataCSVCurrency = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv");
+            dataCSVOffice = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "exchangeOfficeInfo.csv");
+            dataCSVCurrency.remove(0);
+            dataCSVOffice.remove(0);
+
+            ExchangeOffice.name = dataCSVOffice.get(0).get(0);
+            ExchangeOffice.country = dataCSVOffice.get(0).get(1);
+            ExchangeOffice.address  = dataCSVOffice.get(0).get(2);
+            ExchangeOffice.phoneNumber = dataCSVOffice.get(0).get(3);
+
+            TransactionService TS = TransactionService.getInstance();
+            CurrencyService CS = CurrencyService.getInstance();
+            quantity = TS.getMappedCurrency();
+
+            for (List<String> data: dataCSVCurrency) {
+                double quan = Double.parseDouble(data.get(3));
+                String code = data.get(1);
+
+                quantity.put(CS.getCurrencyByCode(code), quan);
+            }
+
+        } catch(IOException ex) {
+            throw new Error(ex);
+        }
+    }
+
     private ExchangeOffice() {
-        this.name = "Exchange SRL";
-        this.country = "Romania";
-        this.address = "str. Splaiul Independentei 204";
-        this.phoneNumber = "+40732671236";
-
-        TransactionService TS = TransactionService.getInstance();
-        CurrencyService CS = CurrencyService.getInstance();
-        quantity = TS.getMappedCurrency();
-
-        quantity.put(CS.getCurrencyByCode("EUR"), 1000.0);
-        quantity.put(CS.getCurrencyByCode("USD"), 1000.0);
-        quantity.put(CS.getCurrencyByCode("GBP"), 1000.0);
-        quantity.put(CS.getCurrencyByCode("RON"), 10000.0);
-        quantity.put(CS.getCurrencyByCode("MDL"), 20000.0);
-        quantity.put(CS.getCurrencyByCode("RUB"), 80000.0);
-        quantity.put(CS.getCurrencyByCode("CHF"), 1000.0);
     }
 
     public void addCurrencyQuantity(Currency currency, double quan) {
@@ -53,8 +70,8 @@ public class ExchangeOffice {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public static void setName(String name) {
+        ExchangeOffice.name = name;
     }
 
     public String getCountry() {
@@ -62,7 +79,7 @@ public class ExchangeOffice {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        ExchangeOffice.country = country;
     }
 
     public String getAddress() {
@@ -70,7 +87,7 @@ public class ExchangeOffice {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        ExchangeOffice.address = address;
     }
 
     public String getPhoneNumber() {
@@ -78,7 +95,7 @@ public class ExchangeOffice {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        ExchangeOffice.phoneNumber = phoneNumber;
     }
 
     public Map<Currency, Double> getQuantity() {
@@ -86,6 +103,6 @@ public class ExchangeOffice {
     }
 
     public void setQuantity(Map<Currency, Double> quantity) {
-        this.quantity = quantity;
+        ExchangeOffice.quantity = quantity;
     }
 }

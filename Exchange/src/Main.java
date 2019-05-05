@@ -1,22 +1,31 @@
 import model.*;
+import model.Currency;
 import service.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, FileNotFoundException {
         Scanner obj = new Scanner(System.in);
 
-        // --------------------- access to services -----------------------
+        // --------------------- access to services ----------------------
         UserService US = UserService.getInstance();
         CurrencyService CS = CurrencyService.getInstance();
         TransactionService TS = TransactionService.getInstance();
         CurrencyHistoryService CHS = CurrencyHistoryService.getInstance();
         ExchangeRateService ERS = ExchangeRateService.getInstance();
-        ExchangeOffice exchangeOffice = ExchangeOffice.getInstance();
+        ExchangeOffice EO = ExchangeOffice.getInstance();
+        // ---------------------------------------------------------------
+
+        // ---------------------- create CSV's ---------------------------
+//        CSVService csvService = CSVService.getInstance();
+//        csvService.createCSVExchangeOffice();
+//        csvService.createCSVUsers();
+//        csvService.createCSVCurrency();
         // ---------------------------------------------------------------
 
         // -------------------- find available currencies ----------------
@@ -28,7 +37,7 @@ public class Main {
         // ---------------------------------------------------------------
 
         // -------------------- exchange rates ------------------------
-        ERS.updateExchangeRates();
+        // ERS.updateExchangeRates();
         List <ExchangeRate> exchangeRates = ExchangeRateService.getListOfExchangeRates();
         System.out.println("\nCurrent Exchange Rates:");
         for (ExchangeRate exchangeRate: exchangeRates) {
@@ -101,7 +110,7 @@ public class Main {
 
         // ---- get info about currency left in the exchange office ----
         System.out.println("\nInfo about the currency quantity left in the exchange office:");
-        Map <Currency, Double> quantity = exchangeOffice.getQuantity();
+        Map <Currency, Double> quantity = EO.getQuantity();
         for (Map.Entry<Currency, Double> entry: quantity.entrySet()) {
             System.out.printf("%s <- %.6f\n", entry.getKey().getCurrencyCode(), entry.getValue());
         }
