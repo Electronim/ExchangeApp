@@ -5,6 +5,7 @@ import model.Currency;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CurrencyService {
     private static List<Currency> listOfCurrencies = new ArrayList<>();
@@ -27,8 +28,8 @@ public class CurrencyService {
                 listOfCurrencies.add(new Currency(currencyName, currencyCode, currencySymbol));
             }
 
-        } catch(IOException ex) {
-            throw new Error(ex);
+        } catch(IOException e) {
+            System.out.println(e.getMessage() + "\n" + e.getCause() + "\n" + e.getLocalizedMessage());
         }
     }
 
