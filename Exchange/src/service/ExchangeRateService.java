@@ -1,5 +1,6 @@
 package service;
 
+import DAO.DAOImplementation.CurrencyDAOImpl;
 import model.Currency;
 import model.ExchangeRate;
 
@@ -18,18 +19,30 @@ public class ExchangeRateService {
 
     static {
         try {
-            List<List<String>> dataCSV;
-            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv");
-            dataCSV.remove(0);
+//            List<List<String>> dataCSV;
+//            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "currencyInfo.csv");
+//            dataCSV.remove(0);
+//
+//            updateCurrencies();
+//            for (List<String> data: dataCSV) {
+//                double rate = Double.parseDouble(data.get(4));
+//                String code = data.get(1);
+//                setRateToCurrencyCode(rate, code);
+//            }
+
+            CurrencyDAOImpl dbC = new CurrencyDAOImpl();
 
             updateCurrencies();
-            for (List<String> data: dataCSV) {
-                double rate = Double.parseDouble(data.get(4));
-                String code = data.get(1);
-                setRateToCurrencyCode(rate, code);
+            for (ExchangeRate exchangeRate : listOfExchangeRates) {
+                String code = exchangeRate.getCurrencyCode();
+                int id = dbC.selectByCode(code);
+                double rate = dbC.selectCurrencyById(id).getRate();
+
+                setRateToCurrencyCode(rate, exchangeRate.getCurrencyCode());
             }
 
-        } catch(IOException ex) {
+
+        } catch(Exception ex) {
             throw new Error(ex);
         }
     }

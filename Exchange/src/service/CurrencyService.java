@@ -1,5 +1,6 @@
 package service;
 
+import DAO.DAOImplementation.CurrencyDAOImpl;
 import model.Currency;
 
 import java.io.IOException;
@@ -18,17 +19,20 @@ public class CurrencyService {
 
     static {
         try {
-            List<List<String>> dataCSV;
-            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv");
-            dataCSV.remove(0);
-            for (List<String> data: dataCSV) {
-                String currencyName = data.get(0);
-                String currencyCode = data.get(1);
-                String currencySymbol = data.get(2);
-                listOfCurrencies.add(new Currency(currencyName, currencyCode, currencySymbol));
-            }
+//            List<List<String>> dataCSV;
+//            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "currencyInfo.csv");
+//            dataCSV.remove(0);
+//            for (List<String> data: dataCSV) {
+//                String currencyName = data.get(0);
+//                String currencyCode = data.get(1);
+//                String currencySymbol = data.get(2);
+//                listOfCurrencies.add(new Currency(currencyName, currencyCode, currencySymbol));
+//            }
 
-        } catch(IOException e) {
+            CurrencyDAOImpl dbC = new CurrencyDAOImpl();
+            listOfCurrencies = dbC.selectAllCurrencies();
+
+        } catch(Exception e) {
             System.out.println(e.getMessage() + "\n" + e.getCause() + "\n" + e.getLocalizedMessage());
         }
     }

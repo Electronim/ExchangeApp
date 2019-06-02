@@ -1,14 +1,52 @@
+import DAO.CurrencyDAO;
+import DAO.DAOImplementation.CurrencyDAOImpl;
+import DAO.DAOImplementation.UserDAOImpl;
 import model.*;
 import model.Currency;
 import service.*;
+import utils.ConnectionUtils;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.*;
 import java.util.logging.Logger;
 
 public class Main {
     private static Logger logger = null;
     public static void main(String[] args) throws IOException, FileNotFoundException {
+
+        // --------------------- access to services ----------------------
+        UserService US = UserService.getInstance();
+        CurrencyService CS = CurrencyService.getInstance();
+        TransactionService TS = TransactionService.getInstance();
+        CurrencyHistoryService CHS = CurrencyHistoryService.getInstance();
+        ExchangeRateService ERS = ExchangeRateService.getInstance();
+        ExchangeOffice EO = ExchangeOffice.getInstance();
+        // ---------------------------------------------------------------
+
+        List<ExchangeRate> exchangeRates = ExchangeRateService.getListOfExchangeRates();
+        Map<Currency, Double> quantity = EO.getQuantity();
+        List<User> users = UserService.getListOfUsers();
+
+
+//        CurrencyDAOImpl dbC = new CurrencyDAOImpl();
+//        dbC.createCurrencyTable();
+//        dbC.insertAll(exchangeRates, quantity);
+//
+//        // dbC.delete(1);
+//
+//        System.out.println(dbC.selectCurrencyById(1).getRate() + " " + dbC.selectCurrencyById(1).getCurrencyCode());
+//        System.out.println(dbC.selectQuantityById(1));
+//
+//        UserDAOImpl dbU = new UserDAOImpl();
+//        dbU.createUserTable();
+//        dbU.insertAll(users);
+
+        // dbU.delete(1);
+        // dbU.insert(US.getUserByUsername("godzilla"));
+
+
         try {
             logger = CSVLogger.getInstance();
         } catch (Exception ex) {
@@ -21,18 +59,12 @@ public class Main {
             ex.printStackTrace();
         }
 
+        logger.info("PROGRAM STARTED");
+
         try {
             Scanner obj = new Scanner(System.in);
 
             logger.info("Give access to services");
-            // --------------------- access to services ----------------------
-            UserService US = UserService.getInstance();
-            CurrencyService CS = CurrencyService.getInstance();
-            TransactionService TS = TransactionService.getInstance();
-            CurrencyHistoryService CHS = CurrencyHistoryService.getInstance();
-            ExchangeRateService ERS = ExchangeRateService.getInstance();
-            ExchangeOffice EO = ExchangeOffice.getInstance();
-            // ---------------------------------------------------------------
 
             // ---------------------- create CSV's ---------------------------
 //            logger.info("Creating CSV's...");
@@ -55,7 +87,7 @@ public class Main {
             logger.info("Get exchanging rates for user");
             // -------------------- exchange rates ------------------------
             // ERS.updateExchangeRates();
-            List<ExchangeRate> exchangeRates = ExchangeRateService.getListOfExchangeRates();
+            // List<ExchangeRate> exchangeRates = ExchangeRateService.getListOfExchangeRates();
             System.out.println("\nCurrent Exchange Rates:");
             for (ExchangeRate exchangeRate : exchangeRates) {
                 System.out.printf("%s %.6f\n", exchangeRate.getCurrencyCode(), exchangeRate.getRate());
@@ -134,7 +166,7 @@ public class Main {
             logger.info("Get info about currency left in the exchange office");
             // ---- get info about currency left in the exchange office ----
             System.out.println("\nInfo about the currency quantity left in the exchange office:");
-            Map<Currency, Double> quantity = EO.getQuantity();
+            // Map<Currency, Double> quantity = EO.getQuantity();
             for (Map.Entry<Currency, Double> entry : quantity.entrySet()) {
                 System.out.printf("%s <- %.6f\n", entry.getKey().getCurrencyCode(), entry.getValue());
             }
@@ -142,5 +174,8 @@ public class Main {
         } catch (Exception e) {
             System.out.println(e.getMessage() + "\n" + e.getCause() + "\n" + e.getLocalizedMessage());
         }
+
+        logger.info("PROGRAM ENDED");
+
     }
 }

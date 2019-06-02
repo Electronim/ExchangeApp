@@ -14,6 +14,7 @@ public class User implements Authenticable {
     private String address;
     private List <Transaction> listOfTransactions = new ArrayList<>();
 
+    public User() { }
 
     public User(String firstName, String lastName, String username, String passwordHash, String country, String address) {
         this.firstName = firstName;

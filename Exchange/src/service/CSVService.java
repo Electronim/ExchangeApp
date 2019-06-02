@@ -58,7 +58,7 @@ public class CSVService {
                 Arrays.asList("Exchange SRL", "Romania", "str. Splaiul Independentei 204", "+40732671236")
         );
 
-        writeCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "exchangeOfficeInfo.csv", head, data);
+        writeCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "exchangeOfficeInfo.csv", head, data);
     }
 
     public void createCSVUsers() throws IOException {
@@ -68,7 +68,7 @@ public class CSVService {
                 Arrays.asList("Ion", "Popescu", "ipopescu", "jfj221ksa9", "Romania", "Iuliu Maniu 207")
         );
 
-        writeCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "usersInfo.csv", head, data);
+        writeCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "usersInfo.csv", head, data);
     }
 
     public void createCSVCurrency() throws IOException {
@@ -83,6 +83,6 @@ public class CSVService {
                 Arrays.asList("Swiss franc", "CHF", "Fr", "1000.0", "0.994877")
         );
 
-        writeCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv", head, data);
+        writeCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "currencyInfo.csv", head, data);
     }
 }

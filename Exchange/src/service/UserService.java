@@ -1,5 +1,6 @@
 package service;
 
+import DAO.DAOImplementation.UserDAOImpl;
 import model.User;
 
 import java.io.File;
@@ -19,20 +20,24 @@ public class UserService {
 
     static {
         try {
-            List<List<String>> dataCSV;
-            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "usersInfo.csv");
-            dataCSV.remove(0);
-            for (List<String> data: dataCSV) {
-                String firstName = data.get(0);
-                String lastName = data.get(1);
-                String username = data.get(2);
-                String passwordHash = data.get(3);
-                String country = data.get(4);
-                String address = data.get(5);
+//            List<List<String>> dataCSV;
+//            dataCSV = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "usersInfo.csv");
+//            dataCSV.remove(0);
+//            for (List<String> data: dataCSV) {
+//                String firstName = data.get(0);
+//                String lastName = data.get(1);
+//                String username = data.get(2);
+//                String passwordHash = data.get(3);
+//                String country = data.get(4);
+//                String address = data.get(5);
+//
+//                listOfUsers.add(new User(firstName, lastName, username, passwordHash, country, address));
+//            }
 
-                listOfUsers.add(new User(firstName, lastName, username, passwordHash, country, address));
-            }
-        } catch (IOException ex){
+            UserDAOImpl dbU = new UserDAOImpl();
+            listOfUsers = dbU.selectAll();
+
+        } catch (Exception ex){
             throw new Error(ex);
         }
     }

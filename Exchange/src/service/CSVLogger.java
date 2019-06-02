@@ -24,7 +24,7 @@ public class CSVLogger {
         Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
         try {
-            FileHandler handler = new FileHandler("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/logging.csv", true);
+            FileHandler handler = new FileHandler("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/logging.csv", true);
             handler.setFormatter(CSVFormatter);
             logger.addHandler(handler);
             logger.setUseParentHandlers(false);

@@ -1,5 +1,6 @@
 package model;
 
+import DAO.DAOImplementation.CurrencyDAOImpl;
 import service.CSVService;
 import service.CurrencyService;
 import service.TransactionService;
@@ -20,14 +21,22 @@ public class ExchangeOffice {
     public static ExchangeOffice getInstance() {
         return ourInstance;
     }
-
     {
         try {
-            List<List<String>> dataCSVCurrency, dataCSVOffice;
+            List<List<String>> dataCSVCurrency;
+            // dataCSVCurrency = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "currencyInfo.csv");
+            // dataCSVCurrency.remove(0);
+            // CurrencyService CS = CurrencyService.getInstance();
+//            for (List<String> data: dataCSVCurrency) {
+//                double quan = Double.parseDouble(data.get(3));
+//                String code = data.get(1);
+//
+//                quantity.put(CS.getCurrencyByCode(code), quan);
+//            }
 
-            dataCSVCurrency = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "currencyInfo.csv");
-            dataCSVOffice = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/Files/", "exchangeOfficeInfo.csv");
-            dataCSVCurrency.remove(0);
+            List<List<String>> dataCSVOffice;
+
+            dataCSVOffice = CSVService.getInstance().readCSVData("/home/stl_man/Desktop/Fac/JAVAProjects/Exchange/src/files/", "exchangeOfficeInfo.csv");
             dataCSVOffice.remove(0);
 
             ExchangeOffice.name = dataCSVOffice.get(0).get(0);
@@ -36,14 +45,15 @@ public class ExchangeOffice {
             ExchangeOffice.phoneNumber = dataCSVOffice.get(0).get(3);
 
             TransactionService TS = TransactionService.getInstance();
-            CurrencyService CS = CurrencyService.getInstance();
             quantity = TS.getMappedCurrency();
 
-            for (List<String> data: dataCSVCurrency) {
-                double quan = Double.parseDouble(data.get(3));
-                String code = data.get(1);
+            CurrencyDAOImpl dbC = new CurrencyDAOImpl();
+            for(Map.Entry<Currency, Double> entry : quantity.entrySet()) {
+                String code = entry.getKey().getCurrencyCode();
+                int id = dbC.selectByCode(code);
+                double quan = dbC.selectQuantityById(id);
 
-                quantity.put(CS.getCurrencyByCode(code), quan);
+                entry.setValue(quan);
             }
 
         } catch(IOException ex) {
