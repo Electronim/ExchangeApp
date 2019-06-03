@@ -9,27 +9,27 @@ public class User implements Authenticable {
     private String firstName;
     private String lastName;
     private String username;
-    private String passwordHash;
+    private String password;
     private String country;
     private String address;
     private List <Transaction> listOfTransactions = new ArrayList<>();
 
     public User() { }
 
-    public User(String firstName, String lastName, String username, String passwordHash, String country, String address) {
+    public User(String firstName, String lastName, String username, String password, String country, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.country = country;
         this.address = address;
     }
 
-    public User(String firstName, String lastName, String username, String passwordHash, String country, String address, List<Transaction> listOfTransactions) {
+    public User(String firstName, String lastName, String username, String password, String country, String address, List<Transaction> listOfTransactions) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.country = country;
         this.address = address;
         this.listOfTransactions = listOfTransactions;
@@ -69,12 +69,12 @@ public class User implements Authenticable {
     }
 
     @Override
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCountry() {

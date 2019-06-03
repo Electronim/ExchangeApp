@@ -10,6 +10,8 @@ public interface UserDAO {
     void update(int id, User user);
     void delete(int id);
     User selectUserById(int id);
+    int findUsername(String username);
+    String selectPasswordByUsername(String username);
     void insertAll(List<User> userList);
     List<User> selectAll();
 }

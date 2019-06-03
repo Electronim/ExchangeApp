@@ -22,4 +22,9 @@ public class ExchangeRate extends Currency {
     public double getInverseRate() {
         return 1.0 / rate;
     }
+
+    @Override
+    public String toString() {
+        return getCurrencyCode() + " <- " + rate;
+    }
 }

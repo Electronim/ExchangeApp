@@ -175,7 +175,7 @@ public class Main {
             System.out.println(e.getMessage() + "\n" + e.getCause() + "\n" + e.getLocalizedMessage());
         }
 
-        logger.info("PROGRAM ENDED");
+        logger.info("PROGRAM ENDED\n\n");
 
     }
 }

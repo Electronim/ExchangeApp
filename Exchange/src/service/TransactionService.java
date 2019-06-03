@@ -23,6 +23,10 @@ public class TransactionService {
         return listOfTransactions;
     }
 
+    public void addNewTransaction(Transaction transaction) {
+        listOfTransactions.add(transaction);
+    }
+
     public void makeNewTransaction() {
         ExchangeRateService ERS = ExchangeRateService.getInstance();
         Scanner obj = new Scanner(System.in);
@@ -113,7 +117,7 @@ public class TransactionService {
         }
 
         for (Transaction transaction: listOfTransactions) {
-            if (!transaction.getDone()) continue;
+            if (transaction == null || !transaction.getDone()) continue;
             double current = infoMap.get(transaction.getFromCurrency());
             current += transaction.getFromSum();
             infoMap.put(transaction.getFromCurrency(), current);
@@ -131,7 +135,7 @@ public class TransactionService {
         }
 
         for (Transaction transaction: listOfTransactions) {
-            if (!transaction.getDone()) continue;
+            if (transaction == null || !transaction.getDone()) continue;
             double current = infoMap.get(transaction.getToCurrency());
             current += transaction.getToSum();
             infoMap.put(transaction.getToCurrency(), current);

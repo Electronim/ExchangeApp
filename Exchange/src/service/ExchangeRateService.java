@@ -116,6 +116,6 @@ public class ExchangeRateService {
         ExchangeRate to = getCurrencyByCode(toCurrencyCode);
 
         double sumToDefault = from.getInverseRate() * sum;
-        return to.getRate() * sumToDefault;
+        return to.getRate() * sumToDefault * (fromCurrencyCode.equals("USD") ? 0.99 : 1.00);
     }
 }

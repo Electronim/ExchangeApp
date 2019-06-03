@@ -1,5 +1,8 @@
 package model;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Transaction {
@@ -19,6 +22,14 @@ public class Transaction {
         this.toSum = toSum;
         this.date = date;
         this.done = done;
+    }
+
+    public Transaction(User user, Currency fromCurrency, Currency toCurrency, double fromSum, Date date) {
+        this.user = user;
+        this.fromCurrency = fromCurrency;
+        this.toCurrency = toCurrency;
+        this.fromSum = fromSum;
+        this.date = date;
     }
 
     public User getUser() {
@@ -75,5 +86,20 @@ public class Transaction {
 
     public void setDone(Boolean done) {
         this.done = done;
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        return "Transaction {" +
+                "\n   user = " + user.getUsername() +
+                "\n   fromCurrency = " + fromCurrency.getCurrencyCode() +
+                "\n   toCurrency = " + toCurrency.getCurrencyCode() +
+                "\n   fromSum = " + new DecimalFormat("##############.##").format(fromSum) +
+                "\n   toSum = " + new DecimalFormat("##############.##").format(toSum) +
+                "\n   date = " + sdf.format(date) +
+                "\n   done = " + done +
+                "\n  }";
     }
 }
